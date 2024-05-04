@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Mount Everest",
+    "length": 8848,
+    "description": "Mount eve is the highest mountain in the world. The summit was named after Eve, the patroness of life.",
+    "mountainImage": "image1",
+    "time": "1 day"
+  },
+  {
+    "name": "Mount kilimanjaro",
+    "length": 5895,
+    "description": "Mount kilimanjaro is the highest mountain in Africa. The summit was named after Kilimanjaro, the Great Grandfather of the earth.",
+    "mountainImage": "image2",
+    "time": "2 days"
+  },
+  {
+    "name": "Mount fuji",
+    "length": 3776,
+    "description": "Mount fuji is the highest mountain in Japan. The summit was named after Fuji, the Japanese god of water.",
+    "mountainImage": "image3",
+    "time": "3 days"
+  },
+  {
+    "name": "Mount k2",
+    "length": 8611,
+    "description": "Mount k2 is the highest mountain in the world. The summit was named after K2, the second moon of Jupiter.",
+    "mountainImage": "image1",
+    "time": "4 days"
+  }
+]

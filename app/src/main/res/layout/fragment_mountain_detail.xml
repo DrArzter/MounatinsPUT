@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- ImageView for mountain image -->
+        <ImageView
+            android:id="@+id/mountainImage"
+            android:layout_width="match_parent"
+            android:layout_height="400sp"
+            android:scaleType="centerCrop"/>
+
+        <!-- TextView for mountain name -->
+        <TextView
+            android:id="@+id/mountainNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mountainImage"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <!-- TextView for height -->
+        <TextView
+            android:id="@+id/length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mountainNameTextView"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5sp" />
+
+        <!-- TextView for description -->
+        <TextView
+            android:id="@+id/description"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/length"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_marginTop="5sp" />
+
+        <!-- Container for Stopwatch Fragment -->
+        <FrameLayout
+            android:id="@+id/stopwatchContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/description"/>
+
+        <!-- Add other TextViews for additional mountain details -->
+
+    </RelativeLayout>
+</ScrollView>
