@@ -1,8 +1,6 @@
 package com.example.mounatinsput
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -15,9 +13,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+
+private lateinit var stepCounter: StepCounter
 
 class StopwatchFragment : Fragment(), SensorEventListener {
 
@@ -32,12 +31,12 @@ class StopwatchFragment : Fragment(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var stepSensor: Sensor? = null
 
-    private val PERMISSION_REQUEST_ACTIVITY_RECOGNITION = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true // Zachowuje stan fragmentu po zmianie orientacji
+        retainInstance = true // Retain instance state on orientation change
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,26 +48,11 @@ class StopwatchFragment : Fragment(), SensorEventListener {
         startButton = view.findViewById(R.id.startButton)
         stopButton = view.findViewById(R.id.stopButton)
         resetButton = view.findViewById(R.id.resetButton)
-        stepCountTextView = view.findViewById(R.id.stepCountTextView)
+        stepCountTextView = view.findViewById(R.id.stepCounterTextView)
 
-        sensorManager =
-            requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-
-        // Check for the permission
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Request the permission
-            requestPermissions(
-                arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-                PERMISSION_REQUEST_ACTIVITY_RECOGNITION
-            )
-        } else {
-            // Permission is already granted, initialize the sensor
-            initializeStepSensor()
-        }
+        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)
+        stepCounter = StepCounter(sensorManager, stepCountTextView)
 
         viewModel = ViewModelProvider(this).get(StopwatchViewModel::class.java)
 
@@ -81,11 +65,19 @@ class StopwatchFragment : Fragment(), SensorEventListener {
         return view
     }
 
+    override fun onSensorChanged(event: SensorEvent?) {
+        // Реализация метода onSensorChanged
+
+        if (event?.sensor?.type == Sensor.TYPE_STEP_DETECTOR) {
+            stepCounter.onSensorChanged(event)
+        }
+    }
+
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putLong("chronometerBaseTime", viewModel.chronometerBaseTime)
         outState.putBoolean("isChronometerRunning", viewModel.isChronometerRunning)
-        outState.putInt("stepCount", viewModel.stepCount)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -93,48 +85,25 @@ class StopwatchFragment : Fragment(), SensorEventListener {
         if (savedInstanceState != null) {
             viewModel.isChronometerRunning = savedInstanceState.getBoolean("isChronometerRunning", false)
             viewModel.chronometerBaseTime = savedInstanceState.getLong("chronometerBaseTime", 0)
-            val elapsedTime = SystemClock.elapsedRealtime() - viewModel.chronometerBaseTime
-            chronometer.base = SystemClock.elapsedRealtime() - elapsedTime
+
+            chronometer.base = viewModel.chronometerBaseTime
             if (viewModel.isChronometerRunning) {
                 chronometer.start()
+            } else {
+                chronometer.stop()
             }
-            viewModel.stepCount = savedInstanceState.getInt("stepCount", 0)
-            stepCountTextView.text = viewModel.stepCount.toString()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            PERMISSION_REQUEST_ACTIVITY_RECOGNITION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted, initialize the step sensor
-                    initializeStepSensor()
-                } else {
-                    // Permission denied, handle accordingly
-                    stepCountTextView.text = "Permission denied for activity recognition"
-                }
-            }
-        }
-    }
-
-    private fun initializeStepSensor() {
-        stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
-
-        if (stepSensor == null) {
-            stepCountTextView.text = "Step sensor not available"
         } else {
-            // Register sensor listener
-            sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL)
+            // Initialize the chronometer to zero on the first run
+            resetChronometer()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        // sensorManager.unregisterListener(this)
+        sensorManager.unregisterListener(this)
+        if (viewModel.isChronometerRunning) {
+            viewModel.chronometerBaseTime = SystemClock.elapsedRealtime() - chronometer.base
+        }
     }
 
     override fun onResume() {
@@ -142,21 +111,11 @@ class StopwatchFragment : Fragment(), SensorEventListener {
         stepSensor?.let {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
-        val elapsedTime = SystemClock.elapsedRealtime() - chronometer.base
-        chronometer.base = SystemClock.elapsedRealtime() + viewModel.chronometerBaseTime - elapsedTime
         if (viewModel.isChronometerRunning) {
+            chronometer.base = SystemClock.elapsedRealtime() - viewModel.chronometerBaseTime
             chronometer.start()
         } else {
-            chronometer.stop()
-        }
-        stepCountTextView.text = viewModel.stepCount.toString()
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor == stepSensor) {
-            event?.values?.get(0)?.toInt()?.let {
-                stepCountTextView.text = it.toString()
-            }
+            chronometer.base = SystemClock.elapsedRealtime() - viewModel.chronometerBaseTime
         }
     }
 
@@ -166,8 +125,7 @@ class StopwatchFragment : Fragment(), SensorEventListener {
 
     private fun startChronometer() {
         if (!viewModel.isChronometerRunning) {
-            val elapsedTimeSincePause = SystemClock.elapsedRealtime() - chronometer.base
-            chronometer.base = SystemClock.elapsedRealtime() - elapsedTimeSincePause
+            chronometer.base = SystemClock.elapsedRealtime() - viewModel.chronometerBaseTime
             chronometer.start()
             viewModel.isChronometerRunning = true
         }
@@ -175,22 +133,24 @@ class StopwatchFragment : Fragment(), SensorEventListener {
 
     private fun stopChronometer() {
         if (viewModel.isChronometerRunning) {
-            chronometer.stop()
             viewModel.chronometerBaseTime = SystemClock.elapsedRealtime() - chronometer.base
+            chronometer.stop()
             viewModel.isChronometerRunning = false
         }
     }
 
     private fun resetChronometer() {
-        if (!viewModel.isChronometerRunning) {
-            chronometer.base = SystemClock.elapsedRealtime()
-            viewModel.chronometerBaseTime = 0
-            viewModel.stepCount = 0
-            stepCountTextView.text = "0"
-        } else {
-            chronometer.base = SystemClock.elapsedRealtime()
-            viewModel.chronometerBaseTime = 0
-        }
+        viewModel.chronometerBaseTime = 0
+        chronometer.base = SystemClock.elapsedRealtime()
+        chronometer.stop()
+        viewModel.isChronometerRunning = false
+
+        stepCounter.resetSteps()
+        updateStepCounter()
+    }
+
+    private fun updateStepCounter() {
+        stepCountTextView.text = "Steps: ${stepCounter.getSteps()}"
     }
 
     private fun updateUI() {

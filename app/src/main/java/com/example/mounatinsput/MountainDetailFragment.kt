@@ -51,7 +51,6 @@ class MountainDetailFragment : Fragment() {
         val descriptionTextView = view.findViewById<TextView>(R.id.description)
         descriptionTextView.text = mountain?.description
 
-        // Display StopwatchFragment
         childFragmentManager.commit {
             replace(R.id.stopwatchContainer, StopwatchFragment().apply {
                 arguments = Bundle().apply {

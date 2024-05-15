@@ -57,7 +57,5 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/description"/>
 
-        <!-- Add other TextViews for additional mountain details -->
-
     </RelativeLayout>
 </ScrollView>
