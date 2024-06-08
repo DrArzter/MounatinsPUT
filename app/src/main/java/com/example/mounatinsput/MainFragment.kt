@@ -1,84 +1,56 @@
+package com.example.mounatinsput
+
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import androidx.fragment.app.Fragment
-import com.example.mounatinsput.Mountain
-import com.example.mounatinsput.R
-import com.example.mountainsput.MountainAdapter
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mountainsput.MountainRecyclerViewAdapter
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), MountainRecyclerViewAdapter.OnItemClickListener {
 
-    private lateinit var listView: ListView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val isTablet = resources.getBoolean(R.bool.isTablet) // Дебуговое сообщение
-        println("[MyTag] isTablet = $isTablet")
-    }
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val isTablet = resources.getBoolean(R.bool.isTablet)
-        val view: View
-
-        if (!isTablet) {
-            view = inflater.inflate(R.layout.fragment_main, container, false)
-            listView = view.findViewById(R.id.listView)
-        } else {
-            view = inflater.inflate(R.layout.fragment_main_tablet, container, false)
-            listView = view.findViewById(R.id.listView)
-        }
-        return view
+        return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val isTablet = resources.getBoolean(R.bool.isTablet)
+        recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
 
-        // Чтение данных из JSON-файла
+        // Read data from JSON file
         val jsonString = readJsonFromFile(requireContext(), "mountains.json")
         val gson = Gson()
         val mountainList = gson.fromJson(jsonString, Array<Mountain>::class.java).toList()
 
-        val adapter = MountainAdapter(requireActivity(), mountainList)
-        listView.adapter = adapter
-
-        listView.setOnItemClickListener { _, view, position, _ ->
-            val selectedMountain = mountainList[position]
-
-            val detailFragment = MountainDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable("selectedMountain", selectedMountain)
-                }
-            }
-
-            // Если это не планшет, заменяем текущий фрагмент деталей
-            if (!isTablet) {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, detailFragment)
-                    .addToBackStack(null)
-                    .commit()
-            } else {
-                // Если это планшет, заменяем фрагмент деталей справа от списка
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.detailFragmentContainerTablet, detailFragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
-        }
+        val adapter = MountainRecyclerViewAdapter(requireActivity(), mountainList, this)
+        recyclerView.adapter = adapter
     }
 
+    override fun onItemClick(mountain: Mountain) {
+        val detailFragment = MountainDetailFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable("selectedMountain", mountain)
+            }
+        }
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, detailFragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
     private fun readJsonFromFile(context: Context, fileName: String): String {
         val inputStream = context.assets.open(fileName)
