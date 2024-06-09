@@ -1,8 +1,10 @@
 // MountainDetailFragment.kt
 package com.example.mounatinsput
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,6 +15,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MountainDetailFragment : Fragment() {
+
+    private lateinit var mountainImageView: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +30,7 @@ class MountainDetailFragment : Fragment() {
 
         val mountain = arguments?.getParcelable<Mountain>("selectedMountain")
 
-        val mountainImageView = view.findViewById<ImageView>(R.id.mountainImage)
+        mountainImageView = view.findViewById(R.id.mountainImage)
         mountain?.mountainImage?.let {
             val resourceId = resources.getIdentifier(it, "drawable", requireContext().packageName)
             Glide.with(requireContext()).load(resourceId).into(mountainImageView)
@@ -49,9 +53,37 @@ class MountainDetailFragment : Fragment() {
             })
         }
 
+        mountainImageView.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Анимация увеличения изображения при нажатии
+                    animateImage(true)
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    // Анимация возврата изображения к обычному размеру
+                    animateImage(false)
+                    true
+                }
+                else -> false
+            }
+        }
+
         view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            // Placeholder action
+            // Placeholder action for FAB button
             android.widget.Toast.makeText(requireContext(), "Selfie feature coming soon!", android.widget.Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun animateImage(isPressed: Boolean) {
+        val scale = if (isPressed) 1.5f else 1f
+        val scaleX = ObjectAnimator.ofFloat(mountainImageView, "scaleX", scale)
+        val scaleY = ObjectAnimator.ofFloat(mountainImageView, "scaleY", scale)
+
+        scaleX.duration = 300
+        scaleY.duration = 300
+
+        scaleX.start()
+        scaleY.start()
     }
 }

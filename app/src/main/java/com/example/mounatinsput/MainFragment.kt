@@ -46,8 +46,8 @@ class MainFragment : Fragment(), MountainRecyclerViewAdapter.OnItemClickListener
             }
         }
 
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, detailFragment)
+        parentFragmentManager.beginTransaction()
+            .replace((view?.parent as ViewGroup).id, detailFragment)
             .addToBackStack(null)
             .commit()
     }
