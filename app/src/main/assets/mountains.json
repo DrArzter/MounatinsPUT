@@ -1,30 +1,100 @@
 [
   {
-    "name": "Mount Everest",
-    "length": 8848,
-    "description": "Mount eve is the highest mountain in the world. The summit was named after Eve, the patroness of life.",
-    "mountainImage": "image1",
-    "time": "1 day"
+    "name": "Szlak Orlich Gniazd",
+    "length": 163,
+    "description": "Szlak Orlich Gniazd to jeden z najpopularniejszych szlaków turystycznych w Polsce, biegnący przez malownicze tereny Jury Krakowsko-Częstochowskiej. Szlak łączy ruiny średniowiecznych zamków, nazywanych Orlimi Gniazdami.",
+    "mountainImage": "image15",
+    "time": "7 days"
   },
   {
-    "name": "Mount kilimanjaro",
-    "length": 5895,
-    "description": "Mount kilimanjaro is the highest mountain in Africa. The summit was named after Kilimanjaro, the Great Grandfather of the earth.",
-    "mountainImage": "image2",
-    "time": "2 days"
+    "name": "Główny Szlak Beskidzki",
+    "length": 496,
+    "description": "Główny Szlak Beskidzki im. Kazimierza Sosnowskiego to najdłuższy szlak turystyczny w polskich górach, biegnący przez Beskidy od Ustronia w Beskidzie Śląskim do Wołosatego w Bieszczadach.",
+    "mountainImage": "image16",
+    "time": "21 days"
   },
   {
-    "name": "Mount fuji",
-    "length": 3776,
-    "description": "Mount fuji is the highest mountain in Japan. The summit was named after Fuji, the Japanese god of water.",
-    "mountainImage": "image3",
+    "name": "Szlak nadmorski",
+    "length": 370,
+    "description": "Szlak nadmorski to trasa wiodąca wzdłuż polskiego wybrzeża Bałtyku, od Świnoujścia do Żarnowca. Szlak oferuje przepiękne widoki na morze, klify oraz piaszczyste plaże.",
+    "mountainImage": "image17",
+    "time": "14 days"
+  },
+  {
+    "name": "Szlak Wielkich Jezior Mazurskich",
+    "length": 160,
+    "description": "Szlak Wielkich Jezior Mazurskich to popularna trasa wodna, prowadząca przez największe jeziora Mazur. Idealna dla miłośników żeglarstwa i kajakarstwa.",
+    "mountainImage": "image4",
+    "time": "10 days"
+  },
+  {
+    "name": "Szlak Karpacki",
+    "length": 700,
+    "description": "Szlak Karpacki to międzynarodowy szlak turystyczny biegnący przez Karpaty, w tym przez Polskę, Ukrainę, Słowację i Rumunię. Szlak oferuje różnorodne krajobrazy i kulturę regionu karpackiego.",
+    "mountainImage": "image5",
+    "time": "30 days"
+  },
+  {
+    "name": "Szlak Cysterski",
+    "length": 105,
+    "description": "Szlak Cysterski to szlak kulturowy, biegnący przez tereny dawnych opactw cysterskich w Polsce, w tym Wąchock, Jędrzejów i Sulejów. Szlak ukazuje bogatą historię i architekturę zakonu cystersów.",
+    "mountainImage": "image6",
+    "time": "5 days"
+  },
+  {
+    "name": "Szlak Piastowski",
+    "length": 130,
+    "description": "Szlak Piastowski to jeden z najstarszych szlaków turystycznych w Polsce, prowadzący przez miejsca związane z początkami państwa polskiego, m.in. Gniezno, Poznań i Kruszwica.",
+    "mountainImage": "image7",
+    "time": "6 days"
+  },
+  {
+    "name": "Szlak Świętego Jakuba",
+    "length": 200,
+    "description": "Szlak Świętego Jakuba to polska część europejskiego szlaku pielgrzymkowego Camino de Santiago, biegnącego od Litwy do granicy z Niemcami. Szlak prowadzi przez piękne krajobrazy i historyczne miejscowości.",
+    "mountainImage": "image8",
+    "time": "10 days"
+  },
+  {
+    "name": "Szlak Tatarski",
+    "length": 60,
+    "description": "Szlak Tatarski prowadzi przez tereny związane z kulturą tatarską w Polsce, w tym przez miejscowości takie jak Kruszyniany i Bohoniki. Szlak ukazuje dziedzictwo i tradycje polskich Tatarów.",
+    "mountainImage": "image9",
     "time": "3 days"
   },
   {
-    "name": "Mount k2",
-    "length": 8611,
-    "description": "Mount k2 is the highest mountain in the world. The summit was named after K2, the second moon of Jupiter.",
-    "mountainImage": "image1",
-    "time": "4 days"
+    "name": "Szlak Zamków Gotyckich",
+    "length": 210,
+    "description": "Szlak Zamków Gotyckich to trasa biegnąca przez Pomorze i Warmiię, łącząca najważniejsze zamki gotyckie w Polsce, w tym Malbork, Gniew i Kwidzyn.",
+    "mountainImage": "image10",
+    "time": "12 days"
+  },
+  {
+    "name": "Szlak Wokół Tatr",
+    "length": 250,
+    "description": "Szlak Wokół Tatr to malownicza trasa rowerowa, prowadząca przez polsko-słowackie pogranicze, oferująca wspaniałe widoki na Tatry.",
+    "mountainImage": "image11",
+    "time": "8 days"
+  },
+  {
+    "name": "Szlak Bursztynowy",
+    "length": 350,
+    "description": "Szlak Bursztynowy to trasa nawiązująca do historycznych dróg handlowych, prowadząca od Bałtyku przez Polskę do Morza Adriatyckiego. Szlak przechodzi przez wiele zabytkowych miast i pięknych krajobrazów.",
+    "mountainImage": "image12",
+    "time": "15 days"
+  },
+  {
+    "name": "Szlak Konny",
+    "length": 200,
+    "description": "Szlak Konny to trasa przeznaczona dla miłośników jazdy konnej, biegnąca przez malownicze tereny Podlasia i Mazowsza, oferująca możliwość zwiedzania na koniu.",
+    "mountainImage": "image13",
+    "time": "10 days"
+  },
+  {
+    "name": "Szlak Rowerowy Green Velo",
+    "length": 2000,
+    "description": "Szlak Rowerowy Green Velo to najdłuższa trasa rowerowa w Polsce, biegnąca przez wschodnie regiony kraju, od Elbląga nad Bałtykiem do Końskich w Górach Świętokrzyskich.",
+    "mountainImage": "image14",
+    "time": "30 days"
   }
 ]
